@@ -1,0 +1,6 @@
+#!/bin/sh
+# Outputs the list of all winning words
+
+git log --format=%b wordle-results.txt |
+  grep -oE '[a-z]+$' |
+  sort

@@ -1,0 +1,8 @@
+#!/bin/sh
+# Outputs a list of all words ever guessed in a game
+
+git log --format=%b wordle-results.txt |
+  grep -E '^[a-z]{5}' |
+  tr ' ' '\n' |
+  sort |
+  uniq

@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+# Outputs all words ever guessed that have not yet been a winning word
+
+diff <(wordle-guessed-words) <(wordle-winning-words) |
+  grep '^< ' |
+  cut -c3-

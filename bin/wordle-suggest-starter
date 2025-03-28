@@ -1,0 +1,37 @@
+#!/bin/sh
+# Suggests a starting word based on words that have never won that do not
+# contain letters used in recent winning words
+
+starters() {
+  n=$1
+
+  letters=$(
+    git log -$n --format=%B wordle-results.txt |
+      grep '^[a-z]' |
+      awk '{ print $NF }' |
+      tr '\n' ' ' |
+      sed 's/ //g'
+    )
+
+  if [ -n "$NO" ]; then
+    letters="${letters}${NO}"
+  fi
+
+  wordle-nonwinners | grep -Ev "[${letters}]"
+}
+
+round=$1
+
+if [ -z "$round" ]; then
+  round=9
+fi
+
+while [ $round -gt 0 ]; do
+  >&2 echo "[Going back ${round}]"
+  words=$(starters $round)
+  if [ -n "$words" ]; then
+    printf "%s\n" "$words"
+    break
+  fi
+  ((round--))
+done
