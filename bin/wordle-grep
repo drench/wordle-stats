@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+excludes = Set.new
+includes = Set.new
+
+ARGV.each do |arg|
+  letters = arg.downcase.chars
+  kind = letters.shift
+
+  case kind
+  when "+" then letters.each { includes.add(_1) }
+  when "-" then letters.each { excludes.add(_1) }
+  end
+end
+
+nopes = excludes.empty? ? nil : /[#{excludes.join}]/
+yesses = includes.empty? ? nil : /[#{includes.join}]/
+
+STDIN.each_line do |line|
+  next if nopes && line.match?(nopes)
+  next unless yesses && line.match?(yesses)
+  next unless includes.all? { |char| line.match?(/#{char}/) }
+
+  puts line
+end
