@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 # Suggests a starting word based on words that have never won that do not
 # contain letters used in recent winning words
+
+scriptdir=${0:a:h}
 
 starters() {
   n=$1
@@ -17,7 +19,7 @@ starters() {
     letters="${letters}${NO}"
   fi
 
-  wordle-nonwinners | grep -Ev "[${letters}]"
+  ${scriptdir}/wordle-nonwinners | grep -Ev "[${letters}]"
 }
 
 round=$1
