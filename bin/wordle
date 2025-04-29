@@ -1,0 +1,85 @@
+#!/usr/bin/env ruby
+
+require "open3"
+require "set"
+
+module Wordle
+  class History
+    LETTER_POINTS = {
+      "a" => 1,
+      "b" => 3,
+      "c" => 3,
+      "d" => 2,
+      "e" => 1,
+      "f" => 4,
+      "g" => 2,
+      "h" => 4,
+      "i" => 1,
+      "j" => 8,
+      "k" => 5,
+      "l" => 1,
+      "m" => 3,
+      "n" => 1,
+      "o" => 1,
+      "p" => 3,
+      "q" => 10,
+      "r" => 1,
+      "s" => 1,
+      "t" => 1,
+      "u" => 1,
+      "v" => 4,
+      "w" => 4,
+      "x" => 8,
+      "y" => 4,
+      "z" => 10
+    }.freeze
+
+    def guessed_words
+      stdout, _ = Open3.capture2("git", "log", "--format=%b", "wordle-results.txt")
+      @guessed_words ||= Set.new(stdout.split("\n").grep(/\A[a-z]{5}\b/).map(&:split).flatten)
+    end
+
+    def winners
+      stdout, _ = Open3.capture2("git", "log", "--format=%b", "wordle-results.txt")
+      @winners ||= Set.new(stdout.split("\n").grep(/ [a-z]{5}\z/).map { |line| line.split.last })
+    end
+
+    def losers = guessed_words - winners
+
+    def norep(set) = set.select { |w| w.match?(/\A(?!.*(.).*\1)[a-z]+\z/) }
+
+    def scrabble_score(word) = word.chars.map { LETTER_POINTS[_1] }.sum
+
+    def suggest_starter
+      recent_winners = winners.first(9)
+
+      while(recent_winners.any?) do
+        winning_letters = recent_winners.flat_map(&:chars)
+        words = grep_v(norep(losers), winning_letters)
+
+        if words.none?
+          recent_winners.pop
+          next
+        end
+
+        return words.sort_by { |w| scrabble_score(w) }.last
+      end
+    end
+
+    def grep_v(set, letters)
+      pattern = Regexp.new("[#{letters.join}]")
+      set.reject { |w| w.match?(pattern) }
+    end
+  end
+end
+
+history = Wordle::History.new
+
+case ARGV[0]
+when "winners"
+  puts history.winners.join("\n")
+when "losers"
+  puts history.losers.join("\n")
+when "suggest_starter"
+  puts history.suggest_starter
+end
