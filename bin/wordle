@@ -82,4 +82,6 @@ when "losers"
   puts history.losers.join("\n")
 when "suggest_starter"
   puts history.suggest_starter
+else
+  warn "usage: #{__FILE__} [winners|losers|suggest_starter]"
 end
