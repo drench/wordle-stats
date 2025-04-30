@@ -18,8 +18,8 @@ yesses = includes.empty? ? nil : /[#{includes.join}]/
 
 STDIN.each_line do |line|
   next if nopes && line.match?(nopes)
-  next unless yesses && line.match?(yesses)
-  next unless includes.all? { |char| line.match?(/#{char}/) }
+  next if yesses && !line.match?(yesses)
+  next if includes && !includes.all? { |char| line.match?(/#{char}/) }
 
   puts line
 end
