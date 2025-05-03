@@ -2,8 +2,14 @@
 
 excludes = Set.new
 includes = Set.new
+uniq = false
 
 ARGV.each do |arg|
+  if arg == "uniq"
+    uniq = true
+    next
+  end
+
   letters = arg.downcase.chars
   kind = letters.shift
 
@@ -20,6 +26,7 @@ STDIN.each_line do |line|
   next if nopes && line.match?(nopes)
   next if yesses && !line.match?(yesses)
   next if includes && !includes.all? { |char| line.match?(/#{char}/) }
+  next if uniq && !line.match?(/^(?!.*(.).*\1)[a-z]+$/)
 
   puts line
 end
