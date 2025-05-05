@@ -77,9 +77,21 @@ history = Wordle::History.new
 
 case ARGV[0]
 when "winners"
-  puts history.winners.join("\n")
+  if ARGV[1] == "with-scrabble-score"
+    history.winners.each do |word|
+      puts [history.scrabble_score(word), word].join("\t")
+    end
+  else
+    puts history.winners.join("\n")
+  end
 when "losers"
-  puts history.losers.join("\n")
+  if ARGV[1] == "with-scrabble-score"
+    history.losers.each do |word|
+      puts [history.scrabble_score(word), word].join("\t")
+    end
+  else
+    puts history.losers.join("\n")
+  end
 when "suggest_starter"
   puts history.suggest_starter
 else
