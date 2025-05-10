@@ -44,7 +44,9 @@ module Wordle
       @winners ||= Set.new(stdout.split("\n").grep(/ [a-z]{5}\z/).map { |line| line.split.last })
     end
 
-    def losers = guessed_words - winners
+    def losers
+      (guessed_words - winners).sort_by { |w| scrabble_score(w) }
+    end
 
     def norep(set) = set.select { |w| w.match?(/\A(?!.*(.).*\1)[a-z]+\z/) }
 
