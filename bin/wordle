@@ -54,6 +54,7 @@ module Wordle
 
     def suggest_starter
       recent_winners = winners.first(9)
+      warn "No recent winners!" if recent_winners.none?
 
       while(recent_winners.any?) do
         winning_letters = recent_winners.flat_map(&:chars)
