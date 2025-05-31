@@ -8,7 +8,9 @@ jobs:
     name: pick-a-starter
     runs-on: ubuntu-latest
 
-  steps:
-    - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1
-    - run: ./bin/wordle suggest_starter
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ruby/setup-ruby@v1
+      - run: ./bin/wordle suggest_starter
