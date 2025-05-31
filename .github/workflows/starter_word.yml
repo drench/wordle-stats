@@ -1,0 +1,14 @@
+name: Pick a starter word
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pick-a-starter:
+    name: pick-a-starter
+    runs-on: ubuntu-latest
+
+  steps:
+    - uses: actions/checkout@v4
+    - uses: ruby/setup-ruby@v1
+    - run: ./bin/wordle suggest_starter
