@@ -65,7 +65,7 @@ module Wordle
     end
 
     def winners
-      @winners ||= Set.new(results_log.grep(/ [a-z]{5}\z/).map { |line| line.split.last })
+      @winners ||= Set.new(results_log.reject(&:empty?).map(&:split).map(&:last))
     end
 
     def losers
