@@ -35,6 +35,9 @@ module Wordle
       "z" => 10
     }.freeze
 
+    # Words that wordle no longer accepts
+    REVOKED_WORDS = Set.new(%w[pucky])
+
     def self.for_date(date:)
       before = date.strftime("%Y-%m-%d")
       out, _ = Open3.capture2("git",
@@ -69,7 +72,7 @@ module Wordle
     end
 
     def losers
-      (guessed_words - winners).sort_by { |w| scrabble_score(w) }
+      (guessed_words - REVOKED_WORDS - winners).sort_by { |w| scrabble_score(w) }
     end
 
     def norep(set) = set.select { |w| w.match?(/\A(?!.*(.).*\1)[a-z]+\z/) }
