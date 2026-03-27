@@ -67,6 +67,12 @@ module Wordle
       @guessed_words ||= Set.new(results_log.grep(/\A[a-z]{5}\b/).map(&:split).flatten)
     end
 
+    def dupe_winners
+      wins = results_log.reject(&:empty?).map(&:split).map(&:last)
+
+      wins.each_with_object(Hash.new(0)) { |w, h| h[w] += 1 }.select { |w,c| c > 1 }
+    end
+
     def winners
       @winners ||= Set.new(results_log.reject(&:empty?).map(&:split).map(&:last))
     end
@@ -125,6 +131,8 @@ when "losers"
   end
 when "suggest_starter"
   puts history.suggest_starter
+when "dupe_winners"
+  p history.dupe_winners
 else
   warn "usage: #{__FILE__} [winners|losers|suggest_starter]"
 end
