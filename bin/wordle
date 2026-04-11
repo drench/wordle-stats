@@ -113,6 +113,14 @@ date = ENV["DATE"].nil? ? Date.today : Date.parse(ENV["DATE"])
 history = Wordle::History.for_date(date:)
 
 case ARGV[0]
+when "guessed"
+  if ARGV[1] == "with-scrabble-score"
+    history.guessed_words.each do |word|
+      puts [history.scrabble_score(word), word].join("\t")
+    end
+  else
+    puts history.guessed_words.join("\n")
+  end
 when "winners"
   if ARGV[1] == "with-scrabble-score"
     history.winners.each do |word|
