@@ -1,3 +1,12 @@
+Wordle 1,767 2/6
+
+🟩⬜⬜🟩🟩
+🟩🟩🟩🟩🟩
+
+WordleBot
+Skill 99/99
+Luck 92/99
+
 Wordle 1,766 5/6
 
 ⬜⬜⬜⬜⬜
