@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "date"
+require "json"
 require "open3"
 require "set"
 
@@ -140,7 +141,7 @@ when "losers"
 when "suggest_starter"
   puts history.suggest_starter
 when "dupe_winners"
-  p history.dupe_winners
+  puts JSON.dump(history.dupe_winners)
 else
   warn "usage: #{__FILE__} [winners|losers|suggest_starter]"
 end
