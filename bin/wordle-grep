@@ -5,7 +5,7 @@ includes = Set.new
 uniq = false
 
 ARGV.each do |arg|
-  if arg == "uniq"
+  if arg == "%" # uniq means no repeated letters
     uniq = true
     next
   end
